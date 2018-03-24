@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Keyboard.cs" />
     <Compile Include="MouseMove.cs" />
+    <Compile Include="MouseScroll.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

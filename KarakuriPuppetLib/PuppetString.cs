@@ -43,16 +43,30 @@ namespace KarakuriPuppetLib
                             $"I Receive: MouseX: {mouseMovedata.DeltaX}, MouseY: {mouseMovedata.DeltaY}");
                         break;
                     case '2':
-                        _inputSimulator.Mouse.LeftButtonDown();
+                        _inputSimulator.Mouse.LeftButtonClick();
                         break;
                     case '3':
-                        _inputSimulator.Mouse.LeftButtonUp();
+                        _inputSimulator.Mouse.LeftButtonDown();
                         break;
                     case '4':
-                        _inputSimulator.Mouse.RightButtonDown();
+                        _inputSimulator.Mouse.LeftButtonUp();
                         break;
                     case '5':
+                        _inputSimulator.Mouse.RightButtonClick();
+                        break;
+                    case '6':
+                        _inputSimulator.Mouse.RightButtonDown();
+                        break;
+                    case '7':
                         _inputSimulator.Mouse.RightButtonUp();
+                        break;
+                    case '8':
+                        var mouseVerticalScrolldata = JsonConvert.DeserializeObject<MouseScroll>(jsonData);
+                        _inputSimulator.Mouse.VerticalScroll(mouseVerticalScrolldata.Delta);
+                        break;
+                    case '9':
+                        var mouseHorizontalScrolldata = JsonConvert.DeserializeObject<MouseScroll>(jsonData);
+                        _inputSimulator.Mouse.HorizontalScroll(mouseHorizontalScrolldata.Delta);
                         break;
                     default:
                         throw new NotSupportedException();
