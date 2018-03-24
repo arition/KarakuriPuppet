@@ -31,12 +31,13 @@ const appTouchpad = new Vue({
             this.pointerData[e.pointerId].deltaY = 0
             this.pointerData[e.pointerId].processed = false
             this.pointerData[e.pointerId].lastTime = performance.now()
+            this.pointerData[e.pointerId].moved = false
         },
         pointerUp: function (e) {
             if (typeof this.pointerData[e.pointerId] === "undefined") {
                 return
             }
-            if (performance.now() - this.pointerData[e.pointerId].lastTime < 300) {
+            if (!this.pointerData[e.pointerId].moved && (performance.now() - this.pointerData[e.pointerId].lastTime < 200)) {
                 socket.send('2')
             }
             delete this.pointerData[e.pointerId]
@@ -51,11 +52,16 @@ const appTouchpad = new Vue({
                         deltaX: e.clientX - this.pointerData[e.pointerId].lastX,
                         deltaY: e.clientY - this.pointerData[e.pointerId].lastY
                     }
+                    if (data.deltaX == 0 && data.deltaY == 0) {
+                        return
+                    }
+                    this.pointerData[e.pointerId].moved = true
                     this.pointerData[e.pointerId].lastX = e.clientX
                     this.pointerData[e.pointerId].lastY = e.clientY
                     socket.send('1' + JSON.stringify(data))
                     break
                 case 2:
+                    this.pointerData[e.pointerId].moved = true
                     this.pointerData[e.pointerId].deltaX = e.clientX - this.pointerData[e.pointerId].lastX
                     this.pointerData[e.pointerId].deltaY = e.clientY - this.pointerData[e.pointerId].lastY
                     this.pointerData[e.pointerId].lastX = e.clientX
@@ -67,13 +73,13 @@ const appTouchpad = new Vue({
                         if ((Math.abs(this.pointerData[pointer0Id].deltaX) > Math.abs(this.pointerData[pointer0Id].deltaY)) &&
                             (Math.abs(this.pointerData[pointer1Id].deltaX) > Math.abs(this.pointerData[pointer1Id].deltaY))) {
                             const data = {
-                                delta: (this.pointerData[pointer0Id].deltaX + this.pointerData[pointer1Id].deltaX) / 4.0
+                                delta: (this.pointerData[pointer0Id].deltaX + this.pointerData[pointer1Id].deltaX) / 2.0
                             }
                             socket.send('9' + JSON.stringify(data))
                         } else if ((Math.abs(this.pointerData[pointer0Id].deltaX) < Math.abs(this.pointerData[pointer0Id].deltaY)) &&
                             (Math.abs(this.pointerData[pointer1Id].deltaX) < Math.abs(this.pointerData[pointer1Id].deltaY))) {
                             const data = {
-                                delta: (this.pointerData[pointer0Id].deltaY + this.pointerData[pointer1Id].deltaY) / 4.0
+                                delta: (this.pointerData[pointer0Id].deltaY + this.pointerData[pointer1Id].deltaY) / 2.0
                             }
                             socket.send('8' + JSON.stringify(data))
                         }

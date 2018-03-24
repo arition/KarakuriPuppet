@@ -12,7 +12,7 @@ namespace KarakuriPuppetModel
         [JsonProperty("DeltaX")] public double DoubleDeltaX { get; set; }
         [JsonProperty("DeltaY")] public double DoubleDeltaY { get; set; }
 
-        [JsonIgnore] public int DeltaX => Convert.ToInt32(Math.Floor(DoubleDeltaX));
-        [JsonIgnore] public int DeltaY => Convert.ToInt32(Math.Floor(DoubleDeltaY));
+        [JsonIgnore] public int DeltaX => Convert.ToInt32(Math.Floor(DoubleDeltaX * 2));
+        [JsonIgnore] public int DeltaY => Convert.ToInt32(Math.Floor(DoubleDeltaY * 2));
     }
 }

@@ -1,0 +1,34 @@
+$border-radius: 10px;
+body {
+    margin: 1rem;
+}
+
+.app-touchpad {
+    margin: 1rem;
+    width: 100%;
+    canvas {
+        width: 100%;
+        border: gray solid 1px;
+        background: rgb(245, 245, 245);
+    }
+    .trackpad {
+        border-top-left-radius: $border-radius;
+        border-top-right-radius: $border-radius;
+        height: 25rem;
+    }
+    .mousebtn {
+        display: flex;
+        margin-top: -0.5rem;
+        height: 5rem;
+        canvas {
+            width: 50%;
+        }
+        .leftbtn {
+            border-bottom-left-radius: $border-radius;
+            border-right: none;
+        }
+        .rightbtn {
+            border-bottom-right-radius: $border-radius;
+        }
+    }
+}
