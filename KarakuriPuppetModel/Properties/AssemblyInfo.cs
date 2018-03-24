@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("KarakuriPuppet")]
+[assembly: AssemblyTitle("KarakuriPuppetModel")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("KarakuriPuppet")]
+[assembly: AssemblyProduct("KarakuriPuppetModel")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("4eec8499-1d4d-4261-8ef3-804b33dac980")]
+[assembly: Guid("5ef8d910-2ae2-4e6a-b0d3-eebddf086661")]
 
 // Version information for an assembly consists of the following four values:
 //

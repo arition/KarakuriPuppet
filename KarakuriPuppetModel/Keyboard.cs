@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KarakuriPuppet
+namespace KarakuriPuppetModel
 {
-    public class Class1
+    public class Keyboard
     {
+        public string Content { get; set; }
     }
 }
