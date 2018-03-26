@@ -37,4 +37,8 @@ body {
 .app-touchpad .mousebtn .rightbtn {
   border-bottom-right-radius: 10px;
 }
+
+.material-icons-fix-line-height {
+  line-height: 1;
+}
 /*# sourceMappingURL=style.css.map */

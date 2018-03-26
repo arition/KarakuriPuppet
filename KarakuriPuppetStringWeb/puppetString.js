@@ -4,7 +4,7 @@ const audio = document.querySelector("#audioSource")
 const mediaSource = new MediaSource()
 
 audio.src = URL.createObjectURL(mediaSource)
-audio.play()
+audio.pause()
 
 mediaSource.addEventListener('sourceopen', function () {
     const queue = []
@@ -13,16 +13,19 @@ mediaSource.addEventListener('sourceopen', function () {
     buffer.addEventListener('update', function () { // Note: Have tried 'updateend'
         if (queue.length > 0 && !buffer.updating) {
             buffer.appendBuffer(queue.shift())
-            //queue.length = 0
         }
     })
 
     socket.addEventListener('message', function (e) {
-
-        if (buffer.updating || queue.length > 0) {
-            queue.push(e.data)
+        if (audio.paused) {
+            buffer.abort()
+            queue.length = 0
         } else {
-            buffer.appendBuffer(e.data)
+            if (buffer.updating || queue.length > 0) {
+                queue.push(e.data)
+            } else {
+                buffer.appendBuffer(e.data)
+            }
         }
     })
 
@@ -42,7 +45,8 @@ mediaSource.addEventListener('sourceopen', function () {
 const appKeyboard = new Vue({
     el: '#app-keyboard',
     data: {
-        keyboardInput: ''
+        keyboardInput: '',
+        volumeIcon: 'volume_off'
     },
     methods: {
         sendInput: function () {
@@ -50,6 +54,15 @@ const appKeyboard = new Vue({
                 content: this.keyboardInput
             }
             socket.send('0' + JSON.stringify(data))
+        },
+        togglePlay: function () {
+            if (this.volumeIcon == 'volume_off') {
+                this.volumeIcon = 'volume_up'
+                audio.play()
+            } else {
+                this.volumeIcon = 'volume_off'
+                audio.pause()
+            }
         }
     }
 })
@@ -140,6 +153,6 @@ const appTouchpad = new Vue({
         },
         rightMouseUp: function () {
             socket.send('7')
-        },
+        }
     }
 })
