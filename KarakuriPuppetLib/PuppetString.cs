@@ -1,9 +1,14 @@
 ﻿using KarakuriPuppetModel;
 using Newtonsoft.Json;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using WebSocketSharp;
-using WebSocketSharp.Server;
 using WindowsInput;
+using CSCore.MediaFoundation;
+using CSCore.SoundIn;
+using CSCore.Streams;
+using WebSocketSharp.Server;
 
 namespace KarakuriPuppetLib
 {
@@ -12,15 +17,48 @@ namespace KarakuriPuppetLib
         private readonly InputSimulator _inputSimulator = new InputSimulator();
         private readonly string _token;
         private bool _validated;
+        private readonly CancellationTokenSource _cancellationToken = new CancellationTokenSource();
 
         public PuppetString(string token)
         {
             _token = token;
         }
 
-        protected override void OnOpen()
+        protected override async void OnOpen()
         {
             _validated = Context.QueryString["token"] == _token;
+            try
+            {
+                await Task.Run(() =>
+                {
+                    using (var capture = new WasapiLoopbackCapture())
+                    {
+                        capture.Initialize();
+                        capture.Start();
+                        using (var audioStream = new SoundInSource(capture) {FillWithZeros = false})
+                        {
+                            using (var wsStream = new WebSocketStream(this))
+                            {
+                                using (var encoder =
+                                    MediaFoundationEncoder.CreateMP3Encoder(audioStream.WaveFormat, wsStream))
+                                {
+                                    var buffer = new byte[audioStream.WaveFormat.BytesPerSecond / 10];
+                                    while (true)
+                                    {
+                                        var read = audioStream.Read(buffer, 0, buffer.Length);
+                                        encoder.Write(buffer, 0, read);
+                                        if (_cancellationToken.IsCancellationRequested) break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }, _cancellationToken.Token);
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+            }
         }
 
         protected override void OnMessage(MessageEventArgs e)
@@ -76,6 +114,28 @@ namespace KarakuriPuppetLib
             {
                 Console.Error.WriteLine(ex.Message);
             }
+        }
+
+        protected override void OnClose(CloseEventArgs e)
+        {
+            _cancellationToken.Cancel();
+            base.OnClose(e);
+        }
+
+        protected override void OnError(ErrorEventArgs e)
+        {
+            _cancellationToken.Cancel();
+            base.OnError(e);
+        }
+
+        public void CancelAudio()
+        {
+            _cancellationToken.Cancel();
+        }
+        
+        public new void Send(byte[] data)
+        {
+            base.Send(data);
         }
     }
 }

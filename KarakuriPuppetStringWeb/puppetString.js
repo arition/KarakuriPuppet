@@ -1,4 +1,43 @@
 const socket = new WebSocket('ws://127.0.0.1:8888/string?token=1212')
+socket.binaryType = "arraybuffer"
+const audio = document.querySelector("#audioSource")
+const mediaSource = new MediaSource()
+
+audio.src = URL.createObjectURL(mediaSource)
+audio.play()
+
+mediaSource.addEventListener('sourceopen', function () {
+    const queue = []
+    const buffer = mediaSource.addSourceBuffer('audio/mpeg')
+
+    buffer.addEventListener('update', function () { // Note: Have tried 'updateend'
+        if (queue.length > 0 && !buffer.updating) {
+            buffer.appendBuffer(queue.shift())
+            //queue.length = 0
+        }
+    })
+
+    socket.addEventListener('message', function (e) {
+
+        if (buffer.updating || queue.length > 0) {
+            queue.push(e.data)
+        } else {
+            buffer.appendBuffer(e.data)
+        }
+    })
+
+    /*fetch(new Request('a.mp3')).then(function (response) {
+        return response.arrayBuffer()
+    }).then(function (data) {
+        buffer.addEventListener('updateend', function (e) {
+            if (!buffer.updating && mediaSource.readyState === 'open') {
+                mediaSource.endOfStream()
+            }
+        })
+        buffer.appendBuffer(data)
+    })*/
+})
+
 
 const appKeyboard = new Vue({
     el: '#app-keyboard',
