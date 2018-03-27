@@ -4,65 +4,25 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebSocketSharp;
 
 namespace KarakuriPuppetLib
 {
-    public class WebSocketStream : Stream
+    public class WebSocketStream : MemoryStream
     {
-        private readonly PuppetString _webSocketBehavior;
+        private readonly PuppetString _puppetString;
 
-        public WebSocketStream(PuppetString webSocketBehavior)
+        public WebSocketStream(PuppetString puppetString)
         {
-            _webSocketBehavior = webSocketBehavior;
-        }
-
-        public override void Flush()
-        {
-        }
-
-        public override long Seek(long offset, SeekOrigin origin)
-        {
-            // hack
-            return 0;
-        }
-
-        public override void SetLength(long value)
-        {
-            throw new NotSupportedException();
-        }
-
-        public override int Read(byte[] buffer, int offset, int count)
-        {
-            throw new NotSupportedException();
+            _puppetString = puppetString;
         }
 
         public override void Write(byte[] buffer, int offset, int count)
         {
-            if (offset != 0 && count != buffer.Length)
+            if (_puppetString.State == WebSocketState.Open)
             {
-                throw new NotSupportedException();
+                _puppetString.Send(buffer);
             }
-
-            try
-            {
-                _webSocketBehavior.Send(buffer);
-            }
-            catch
-            {
-                _webSocketBehavior.CancelAudio();
-            }
-        }
-
-        public override bool CanRead => true;
-        public override bool CanSeek => false;
-        public override bool CanWrite => true;
-        //hack
-        public override long Length => 0;
-
-        public override long Position
-        {
-            get => throw new NotSupportedException();
-            set => throw new NotSupportedException();
         }
     }
 }
