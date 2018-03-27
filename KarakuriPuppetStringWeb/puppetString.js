@@ -26,19 +26,13 @@ mediaSource.addEventListener('sourceopen', function () {
             } else {
                 buffer.appendBuffer(e.data)
             }
+            if (audio.buffered.length != 0) {
+                if ((audio.buffered.end(0) - audio.currentTime) > 0.4) {
+                    audio.currentTime = audio.buffered.end(0)
+                }
+            }
         }
     })
-
-    /*fetch(new Request('a.mp3')).then(function (response) {
-        return response.arrayBuffer()
-    }).then(function (data) {
-        buffer.addEventListener('updateend', function (e) {
-            if (!buffer.updating && mediaSource.readyState === 'open') {
-                mediaSource.endOfStream()
-            }
-        })
-        buffer.appendBuffer(data)
-    })*/
 })
 
 
@@ -59,6 +53,9 @@ const appKeyboard = new Vue({
             if (this.volumeIcon == 'volume_off') {
                 this.volumeIcon = 'volume_up'
                 audio.play()
+                setTimeout(function () {
+                    audio.currentTime = audio.buffered.end(0)
+                }, 100)
             } else {
                 this.volumeIcon = 'volume_off'
                 audio.pause()
