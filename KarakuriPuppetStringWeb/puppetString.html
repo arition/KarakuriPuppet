@@ -35,11 +35,11 @@
                     v-on:pointerout="pointerUp" v-on:pointercancel="pointerUp">
                     Your browser does not support canvas element.
                 </canvas>
-                <div class="mousebtn">
-                    <canvas class="leftbtn" v-on:mousedown="leftMouseDown" v-on:mouseup="leftMouseUp">
+                <div class="mousebtn" touch-action="none">
+                    <canvas class="leftbtn" v-on:pointerdown="leftMouseDown" v-on:pointerup="leftMouseUp">
                         Your browser does not support canvas element.
                     </canvas>
-                    <canvas class="rightbtn" v-on:mousedown="rightMouseDown" v-on:mouseup="rightMouseUp">
+                    <canvas class="rightbtn" v-on:pointerdown="rightMouseDown" v-on:pointerup="rightMouseUp">
                         Your browser does not support canvas element.
                     </canvas>
                 </div>
