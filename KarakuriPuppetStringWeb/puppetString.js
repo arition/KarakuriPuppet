@@ -48,6 +48,7 @@ const appKeyboard = new Vue({
                 content: this.keyboardInput
             }
             socket.send('0' + JSON.stringify(data))
+            this.keyboardInput = ''
         },
         togglePlay: function () {
             if (this.volumeIcon == 'volume_off') {
