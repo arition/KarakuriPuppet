@@ -16,7 +16,7 @@ body {
     .trackpad {
         border-top-left-radius: $border-radius;
         border-top-right-radius: $border-radius;
-        height: 25rem;
+        height: calc(100vh - 11.5rem);
     }
     .mousebtn {
         display: flex;

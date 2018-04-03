@@ -18,7 +18,7 @@ body {
 .app-touchpad .trackpad {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  height: 25rem;
+  height: calc(100vh - 11.5rem);
 }
 
 .app-touchpad .mousebtn {
