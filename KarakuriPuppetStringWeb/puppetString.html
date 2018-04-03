@@ -29,12 +29,12 @@
             </div>
         </div>
         <div class="row">
-            <div id="app-touchpad" class="app-touchpad" touch-action="none">
+            <div id="app-touchpad" class="app-touchpad">
                 <canvas class="trackpad" v-on:pointerdown="pointerDown" v-on:pointerup="pointerUp" v-on:pointermove="pointerMove" v-on:pointerleave="pointerUp"
                     v-on:pointerout="pointerUp" v-on:pointercancel="pointerUp">
                     Your browser does not support canvas element.
                 </canvas>
-                <div class="mousebtn" touch-action="none">
+                <div class="mousebtn">
                     <canvas class="leftbtn" v-on:pointerdown="leftMouseDown" v-on:pointerup="leftMouseUp">
                         Your browser does not support canvas element.
                     </canvas>
