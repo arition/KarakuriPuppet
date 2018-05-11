@@ -12,10 +12,30 @@
 </head>
 
 <body>
-    <audio id="audioSource"></audio>
-    <div class="container-fluid">
-        <div id="row">
-            <div id="app-keyboard">
+    <script src="https://unpkg.com/vue/dist/vue.min.js" type="application/javascript"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.min.js" type="application/javascript"></script>
+    <script src="https://unpkg.com/pepjs/dist/pep.min.js" type="application/javascript"></script>
+    <script src="https://unpkg.com/promise-polyfill" type="application/javascript"></script>
+    <script src="https://unpkg.com/whatwg-fetch" type="application/javascript"></script>
+    <div id="app">
+        <router-view></router-view>
+    </div>
+    <div id="templates" class="d-none">
+        <div id="app-main">
+            <div>
+                <audio id="audioSource"></audio>
+                <div class="container-fluid">
+                    <div id="row">
+                        <app-keyboard></app-keyboard>
+                    </div>
+                    <div class="row">
+                        <app-touchpad></app-touchpad>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="app-keyboard">
+            <div>
                 <div class="input-group">
                     <input type="text" class="form-control" v-model="keyboardInput" v-on:keyup.enter="sendInput" placeholder="Keyboard Input"
                     />
@@ -28,8 +48,8 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div id="app-touchpad" class="app-touchpad">
+        <div id="app-touchpad">
+            <div class="app-touchpad">
                 <canvas class="trackpad" v-on:pointerdown="pointerDown" v-on:pointerup="pointerUp" v-on:pointermove="pointerMove" v-on:pointerleave="pointerUp"
                     v-on:pointerout="pointerUp" v-on:pointercancel="pointerUp">
                     Your browser does not support canvas element.
@@ -45,8 +65,6 @@
             </div>
         </div>
     </div>
-    <script src="https://unpkg.com/vue/dist/vue.min.js" type="application/javascript"></script>
-    <script src="https://unpkg.com/pepjs/dist/pep.min.js" type="application/javascript"></script>
     <script src="puppetString.js" type="application/javascript"></script>
 </body>
 

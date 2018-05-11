@@ -1,46 +1,11 @@
-const socket = new WebSocket('ws://127.0.0.1:8888/string?token=1212')
-socket.binaryType = "arraybuffer"
-const audio = document.querySelector("#audioSource")
-const mediaSource = new MediaSource()
+var socket = null
 
-audio.src = URL.createObjectURL(mediaSource)
-audio.pause()
-
-mediaSource.addEventListener('sourceopen', function () {
-    const queue = []
-    const buffer = mediaSource.addSourceBuffer('audio/mpeg')
-
-    buffer.addEventListener('update', function () { // Note: Have tried 'updateend'
-        if (queue.length > 0 && !buffer.updating) {
-            buffer.appendBuffer(queue.shift())
+Vue.component('app-keyboard', {
+    data: function () {
+        return {
+            keyboardInput: '',
+            volumeIcon: 'volume_off'
         }
-    })
-
-    socket.addEventListener('message', function (e) {
-        if (audio.paused) {
-            buffer.abort()
-            queue.length = 0
-        } else {
-            if (buffer.updating || queue.length > 0) {
-                queue.push(e.data)
-            } else {
-                buffer.appendBuffer(e.data)
-            }
-            if (audio.buffered.length != 0) {
-                if ((audio.buffered.end(0) - audio.currentTime) > 0.4) {
-                    audio.currentTime = audio.buffered.end(0)
-                }
-            }
-        }
-    })
-})
-
-
-const appKeyboard = new Vue({
-    el: '#app-keyboard',
-    data: {
-        keyboardInput: '',
-        volumeIcon: 'volume_off'
     },
     methods: {
         sendInput: function () {
@@ -51,6 +16,7 @@ const appKeyboard = new Vue({
             this.keyboardInput = ''
         },
         togglePlay: function () {
+            const audio = document.querySelector("#app #audioSource")
             if (this.volumeIcon == 'volume_off') {
                 this.volumeIcon = 'volume_up'
                 audio.play()
@@ -62,13 +28,15 @@ const appKeyboard = new Vue({
                 audio.pause()
             }
         }
-    }
+    },
+    template: document.querySelector("#app-keyboard").innerHTML
 })
 
-const appTouchpad = new Vue({
-    el: '#app-touchpad',
-    data: {
-        pointerData: {}
+Vue.component('app-touchpad', {
+    data: function () {
+        return {
+            pointerData: {}
+        }
     },
     methods: {
         pointerDown: function (e) {
@@ -152,5 +120,86 @@ const appTouchpad = new Vue({
         rightMouseUp: function () {
             socket.send('7')
         }
+    },
+    template: document.querySelector("#app-touchpad").innerHTML
+})
+
+Vue.component('app-serverList', {
+    data: function () {
+        return {
+            serverList: JSON.parse(localStorage.getItem(serverList))
+        }
+    },
+    methods: {
+
     }
 })
+
+const appMain = Vue.component('app-main', {
+    props: ['host', 'token'],
+    mounted: function () {
+        this.$nextTick(function () {
+            this.initWebSocket()
+        })
+    },
+    /*watch: {
+        '$route': 'initWebSocket'
+    },*/
+    methods: {
+        initWebSocket: function () {
+            socket = new WebSocket('ws://' + this.host + '/string?token=' + this.token)
+            socket.binaryType = "arraybuffer"
+            const audio = document.querySelector("#app #audioSource")
+            const mediaSource = new MediaSource()
+
+            audio.src = URL.createObjectURL(mediaSource)
+            audio.pause()
+
+            mediaSource.addEventListener('sourceopen', function () {
+                const queue = []
+                const buffer = mediaSource.addSourceBuffer('audio/mpeg')
+
+                buffer.addEventListener('update', function () { // Note: Have tried 'updateend'
+                    if (queue.length > 0 && !buffer.updating) {
+                        buffer.appendBuffer(queue.shift())
+                    }
+                })
+
+                socket.addEventListener('message', function (e) {
+                    if (audio.paused) {
+                        buffer.abort()
+                        queue.length = 0
+                    } else {
+                        if (buffer.updating || queue.length > 0) {
+                            queue.push(e.data)
+                        } else {
+                            buffer.appendBuffer(e.data)
+                        }
+                        if (audio.buffered.length != 0) {
+                            if ((audio.buffered.end(0) - audio.currentTime) > 0.4) {
+                                audio.currentTime = audio.buffered.end(0)
+                            }
+                        }
+                    }
+                })
+            })
+        }
+    },
+    template: document.querySelector("#app-main").innerHTML
+})
+
+document.querySelector('#templates').innerHTML = ''
+const router = new VueRouter({
+    routes: [{
+        path: '/',
+        component: appMain,
+        props: {
+            host: '127.0.0.1:8888',
+            token: '1212'
+        }
+    }]
+})
+
+new Vue({
+    router
+}).$mount('#app')
