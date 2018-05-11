@@ -1,4 +1,4 @@
-var socket = null
+let socket = null
 
 Vue.component('app-keyboard', {
     data: function () {
@@ -16,7 +16,7 @@ Vue.component('app-keyboard', {
             this.keyboardInput = ''
         },
         togglePlay: function () {
-            const audio = document.querySelector("#app #audioSource")
+            const audio = document.querySelector('#app #audioSource')
             if (this.volumeIcon == 'volume_off') {
                 this.volumeIcon = 'volume_up'
                 audio.play()
@@ -29,7 +29,7 @@ Vue.component('app-keyboard', {
             }
         }
     },
-    template: document.querySelector("#app-keyboard").innerHTML
+    template: document.querySelector('#app-keyboard').innerHTML
 })
 
 Vue.component('app-touchpad', {
@@ -40,7 +40,7 @@ Vue.component('app-touchpad', {
     },
     methods: {
         pointerDown: function (e) {
-            if (typeof this.pointerData[e.pointerId] === "undefined") {
+            if (typeof this.pointerData[e.pointerId] === 'undefined') {
                 this.pointerData[e.pointerId] = {}
             }
             this.pointerData[e.pointerId].lastX = e.clientX
@@ -52,7 +52,7 @@ Vue.component('app-touchpad', {
             this.pointerData[e.pointerId].moved = false
         },
         pointerUp: function (e) {
-            if (typeof this.pointerData[e.pointerId] === "undefined") {
+            if (typeof this.pointerData[e.pointerId] === 'undefined') {
                 return
             }
             if (!this.pointerData[e.pointerId].moved && (performance.now() - this.pointerData[e.pointerId].lastTime < 200)) {
@@ -61,7 +61,7 @@ Vue.component('app-touchpad', {
             delete this.pointerData[e.pointerId]
         },
         pointerMove: function (e) {
-            if (typeof this.pointerData[e.pointerId] === "undefined") {
+            if (typeof this.pointerData[e.pointerId] === 'undefined') {
                 return
             }
             switch (Object.keys(this.pointerData).length) {
@@ -121,7 +121,7 @@ Vue.component('app-touchpad', {
             socket.send('7')
         }
     },
-    template: document.querySelector("#app-touchpad").innerHTML
+    template: document.querySelector('#app-touchpad').innerHTML
 })
 
 Vue.component('app-serverList', {
@@ -148,8 +148,8 @@ const appMain = Vue.component('app-main', {
     methods: {
         initWebSocket: function () {
             socket = new WebSocket('ws://' + this.host + '/string?token=' + this.token)
-            socket.binaryType = "arraybuffer"
-            const audio = document.querySelector("#app #audioSource")
+            socket.binaryType = 'arraybuffer'
+            const audio = document.querySelector('#app #audioSource')
             const mediaSource = new MediaSource()
 
             audio.src = URL.createObjectURL(mediaSource)
@@ -185,7 +185,7 @@ const appMain = Vue.component('app-main', {
             })
         }
     },
-    template: document.querySelector("#app-main").innerHTML
+    template: document.querySelector('#app-main').innerHTML
 })
 
 document.querySelector('#templates').innerHTML = ''
