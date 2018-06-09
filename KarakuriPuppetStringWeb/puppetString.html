@@ -12,8 +12,8 @@
 </head>
 
 <body>
-    <script src="https://unpkg.com/vue/dist/vue.min.js" type="application/javascript"></script>
-    <script src="https://unpkg.com/vue-router/dist/vue-router.min.js" type="application/javascript"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js" type="application/javascript"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js" type="application/javascript"></script>
     <script src="https://unpkg.com/pepjs/dist/pep.min.js" type="application/javascript"></script>
     <script src="https://unpkg.com/promise-polyfill" type="application/javascript"></script>
     <script src="https://unpkg.com/whatwg-fetch" type="application/javascript"></script>
@@ -21,6 +21,36 @@
         <router-view></router-view>
     </div>
     <div id="templates" class="d-none">
+        <div id="app-serverList">
+            <div>
+                <div class="container-fluid">
+                    <h1 class="server-list-title">KarakuriPuppet</h1>
+                    <div class="server-list">
+                        <div v-for="item in serverList" v-on:click="listClick(item.host, item.token)">
+                            <div class="computer-icon">
+                                <i class="material-icons">computer</i>
+                            </div>
+                            <div class="host-info">
+                                <div class="host">{{ item.host.split(':')[0] }}</div>
+                                <div class="port small">{{ item.host.split(':')[1] }}</div>
+                            </div>
+                            <div class="arrow-icon">
+                                <i class="material-icons">arrow_forward_ios</i>
+                            </div>
+                        </div>
+                        <div v-on:click="addClick">
+                            <div class="add-icon">
+                                <i class="material-icons">add</i>
+                            </div>
+                            <div class="add-info"><div class="add">Add new</div></div>
+                            <div class="arrow-icon">
+                                <i class="material-icons">arrow_forward_ios</i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="app-main">
             <div>
                 <audio id="audioSource"></audio>

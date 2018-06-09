@@ -38,3 +38,94 @@ body {
 .material-icons-fix-line-height {
     line-height: 1;
 }
+
+.server-list-title {
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+    text-align: center;
+    color: #5A5A5A;
+}
+
+.server-list {
+    display: flex;
+    flex-flow: row wrap;
+    >div {
+        display: flex;
+        align-items: center;
+        border: 1px solid #707070;
+        height: 6rem;
+        border-radius: $border-radius;
+        margin: 1rem;
+        width: 330px;
+        .material-icons {
+            font-size: 36px;
+            line-height: 1.5;
+        }
+        .add-icon,
+        .computer-icon {
+            margin-left: 2rem;
+            margin-right: 2rem;
+        }
+        .add-info,
+        .host-info {
+            margin-right: 2rem;
+            flex: auto;
+            >.host {
+                color: #5A5A5A;
+                margin-bottom: 0.4rem;
+                font-weight: 600;
+            }
+            >.port {
+                color: #707070;
+                margin-bottom: 0.2rem;
+            }
+            >.add {
+                color: #5A5A5A;
+                font-weight: 600;
+            }
+        }
+        .arrow-icon {
+            color: #C0C0C0;
+            margin-right: 2rem;
+        }
+    }
+    >div:nth-child(4n) {
+        .computer-icon {
+            color: cadetblue;
+        }
+    }
+    >div:nth-child(4n+1) {
+        .computer-icon {
+            color: darkslateblue;
+        }
+    }
+    >div:nth-child(4n+2) {
+        .computer-icon {
+            color: lightsalmon;
+        }
+    }
+    >div:nth-child(4n+3) {
+        .computer-icon {
+            color: plum;
+        }
+    }
+    @media all and (max-width: 500px) {
+        flex-flow: column nowrap;
+        justify-content: initial;
+        >div {
+            margin: initial;
+            width: initial;
+            border-radius: initial;
+            margin-left: 0px;
+            margin-top: -1px;
+        }
+        >div:first-child {
+            border-top-left-radius: $border-radius;
+            border-top-right-radius: $border-radius;
+        }
+        >div:last-child {
+            border-bottom-left-radius: $border-radius;
+            border-bottom-right-radius: $border-radius;
+        }
+    }
+}

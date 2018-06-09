@@ -43,4 +43,105 @@ body {
 .material-icons-fix-line-height {
   line-height: 1;
 }
+
+.server-list-title {
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+  text-align: center;
+  color: #5A5A5A;
+}
+
+.server-list {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.server-list > div {
+  display: flex;
+  align-items: center;
+  border: 1px solid #707070;
+  height: 6rem;
+  border-radius: 10px;
+  margin: 1rem;
+  width: 330px;
+}
+
+.server-list > div .material-icons {
+  font-size: 36px;
+  line-height: 1.5;
+}
+
+.server-list > div .add-icon,
+.server-list > div .computer-icon {
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+.server-list > div .add-info,
+.server-list > div .host-info {
+  margin-right: 2rem;
+  flex: auto;
+}
+
+.server-list > div .add-info > .host,
+.server-list > div .host-info > .host {
+  color: #5A5A5A;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+
+.server-list > div .add-info > .port,
+.server-list > div .host-info > .port {
+  color: #707070;
+  margin-bottom: 0.2rem;
+}
+
+.server-list > div .add-info > .add,
+.server-list > div .host-info > .add {
+  color: #5A5A5A;
+  font-weight: 600;
+}
+
+.server-list > div .arrow-icon {
+  color: #C0C0C0;
+  margin-right: 2rem;
+}
+
+.server-list > div:nth-child(4n) .computer-icon {
+  color: cadetblue;
+}
+
+.server-list > div:nth-child(4n+1) .computer-icon {
+  color: darkslateblue;
+}
+
+.server-list > div:nth-child(4n+2) .computer-icon {
+  color: lightsalmon;
+}
+
+.server-list > div:nth-child(4n+3) .computer-icon {
+  color: plum;
+}
+
+@media all and (max-width: 500px) {
+  .server-list {
+    flex-flow: column nowrap;
+    justify-content: initial;
+  }
+  .server-list > div {
+    margin: initial;
+    width: initial;
+    border-radius: initial;
+    margin-left: 0px;
+    margin-top: -1px;
+  }
+  .server-list > div:first-child {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+  .server-list > div:last-child {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+}
 /*# sourceMappingURL=style.css.map */

@@ -124,19 +124,30 @@ Vue.component('app-touchpad', {
     template: document.querySelector('#app-touchpad').innerHTML
 })
 
-Vue.component('app-serverList', {
+const appServerList = Vue.component('app-serverList', {
     data: function () {
         return {
-            serverList: JSON.parse(localStorage.getItem(serverList))
+            serverList: JSON.parse(localStorage.getItem('serverList'))
         }
     },
     methods: {
-
-    }
+        listClick: function (host, token) {
+            localStorage.setItem('host', host)
+            localStorage.setItem('token', token)
+            this.$router.push('/main')
+        },
+        addClick: function () {}
+    },
+    template: document.querySelector('#app-serverList').innerHTML
 })
 
 const appMain = Vue.component('app-main', {
-    props: ['host', 'token'],
+    data: function () {
+        return {
+            host: localStorage.getItem('host'),
+            token: localStorage.getItem('token')
+        }
+    },
     mounted: function () {
         this.$nextTick(function () {
             this.initWebSocket()
@@ -191,13 +202,14 @@ const appMain = Vue.component('app-main', {
 document.querySelector('#templates').innerHTML = ''
 const router = new VueRouter({
     routes: [{
-        path: '/',
-        component: appMain,
-        props: {
-            host: '127.0.0.1:8888',
-            token: '1212'
+            path: '/main',
+            component: appMain,
+        },
+        {
+            path: '/',
+            component: appServerList,
         }
-    }]
+    ]
 })
 
 new Vue({
