@@ -1,5 +1,5 @@
 body {
-  margin: 1rem;
+  margin: 1.5rem;
   touch-action: none;
   user-select: none;
 }
@@ -18,7 +18,7 @@ body {
 .app-touchpad .trackpad {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  height: calc(100vh - 11.5rem);
+  height: calc(100vh - 12.5rem);
 }
 
 .app-touchpad .mousebtn {
@@ -40,6 +40,24 @@ body {
   border-bottom-right-radius: 10px;
 }
 
+.homebtn {
+  position: absolute;
+  background-color: #4C81E9;
+  border-bottom-right-radius: 10px;
+  margin: -1.5rem;
+  width: 1.7rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.homebtn .material-icons {
+  color: white;
+  font-size: 18px;
+  padding-bottom: 0.3rem;
+}
+
 .material-icons-fix-line-height {
   line-height: 1;
 }
@@ -57,6 +75,7 @@ body {
 }
 
 .server-list > div {
+  cursor: pointer;
   display: flex;
   align-items: center;
   border: 1px solid #707070;
@@ -123,7 +142,7 @@ body {
   color: plum;
 }
 
-@media all and (max-width: 500px) {
+@media all and (max-width: 575.98px) {
   .server-list {
     flex-flow: column nowrap;
     justify-content: initial;

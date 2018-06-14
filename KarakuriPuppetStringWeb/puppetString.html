@@ -42,7 +42,9 @@
                             <div class="add-icon">
                                 <i class="material-icons">add</i>
                             </div>
-                            <div class="add-info"><div class="add">Add new</div></div>
+                            <div class="add-info">
+                                <div class="add">Add new</div>
+                            </div>
                             <div class="arrow-icon">
                                 <i class="material-icons">arrow_forward_ios</i>
                             </div>
@@ -51,9 +53,45 @@
                 </div>
             </div>
         </div>
+        <div id="app-login">
+            <div>
+                <div class="container-fluid">
+                    <h1 class="server-list-title">KarakuriPuppet</h1>
+                    <div>
+                        <div class="alert alert-danger" role="alert" v-show="loginFailed">
+                            {{ loginFailedMessage }}
+                        </div>
+                        <form v-on:submit.prevent="login">
+                            <div class="form-group row">
+                                <label for="host" class="col-sm-2 col-form-label">Host</label>
+                                <div class="col-sm-10">
+                                    <input v-model="host" type="text" class="form-control" v-bind:class="{ 'is-invalid': hostInvalid }" id="host" placeholder="127.0.0.1:1212">
+                                    <div class="invalid-feedback">
+                                        Please enter a valid host address
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="token" class="col-sm-2 col-form-label">Token</label>
+                                <div class="col-sm-10">
+                                    <input v-model="token" type="password" class="form-control" v-bind:class="{ 'is-invalid': tokenInvalid }" id="token" placeholder="Token">
+                                    <div class="invalid-feedback">
+                                        Please enter a token
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Add</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="app-main">
             <div>
                 <audio id="audioSource"></audio>
+                <div class="homebtn" v-on:click="home">
+                    <i class="material-icons">home</i>
+                </div>
                 <div class="container-fluid">
                     <div id="row">
                         <app-keyboard></app-keyboard>

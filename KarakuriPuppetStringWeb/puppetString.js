@@ -17,7 +17,7 @@ Vue.component('app-keyboard', {
         },
         togglePlay: function () {
             const audio = document.querySelector('#app #audioSource')
-            if (this.volumeIcon == 'volume_off') {
+            if (this.volumeIcon === 'volume_off') {
                 this.volumeIcon = 'volume_up'
                 audio.play()
                 setTimeout(function () {
@@ -70,7 +70,7 @@ Vue.component('app-touchpad', {
                         deltaX: e.clientX - this.pointerData[e.pointerId].lastX,
                         deltaY: e.clientY - this.pointerData[e.pointerId].lastY
                     }
-                    if (data.deltaX == 0 && data.deltaY == 0) {
+                    if (data.deltaX === 0 && data.deltaY === 0) {
                         return
                     }
                     this.pointerData[e.pointerId].moved = true
@@ -105,7 +105,6 @@ Vue.component('app-touchpad', {
                         this.pointerData[pointer1Id].processed = false
                     }
                     break
-
             }
         },
         leftMouseDown: function () {
@@ -136,9 +135,80 @@ const appServerList = Vue.component('app-serverList', {
             localStorage.setItem('token', token)
             this.$router.push('/main')
         },
-        addClick: function () {}
+        addClick: function () {
+            this.$router.push('/login')
+        }
     },
     template: document.querySelector('#app-serverList').innerHTML
+})
+
+const appLogin = Vue.component('app-login', {
+    data: function () {
+        return {
+            host: '',
+            token: '',
+            hostInvalid: false,
+            tokenInvalid: false,
+            loginFailed: false,
+            loginFailedMessage: 'Cannot connect to this server'
+        }
+    },
+    methods: {
+        login: function () {
+            this.loginFailed = false
+            this.hostInvalid = false
+            this.tokenInvalid = false
+            if (this.host === '' || this.host === null) {
+                this.hostInvalid = true
+            }
+            if (this.token === '' || this.token === null) {
+                this.tokenInvalid = true
+            }
+            if (this.hostInvalid || this.tokenInvalid) return
+            socket = new WebSocket('ws://' + this.host + '/echo?token=' + this.token)
+            socket.addEventListener('error', () => {
+                this.loginFailed = true
+                this.loginFailedMessage = 'Cannot connect to this server'
+                socket.close()
+            })
+            socket.addEventListener('message', e => {
+                if (e.data === '-') {
+                    let serverList
+                    try {
+                        serverList = JSON.parse(localStorage.getItem('serverList'))
+                    } catch (ex) {
+                        serverList = []
+                    }
+                    if (!Array.isArray(serverList)) {
+                        serverList = []
+                    }
+                    serverList.push({
+                        host: this.host,
+                        token: this.token
+                    })
+                    localStorage.setItem('serverList', JSON.stringify(serverList))
+                    localStorage.setItem('host', this.host)
+                    localStorage.setItem('token', this.token)
+                    socket.close()
+                    this.$router.push('/main')
+                } else {
+                    this.loginFailed = true
+                    this.loginFailedMessage = 'Cannot connect to this server'
+                    socket.close()
+                }
+            })
+            socket.addEventListener('close', e => {
+                if (e.code === 4000) {
+                    this.loginFailed = true
+                    this.loginFailedMessage = 'Token error'
+                }
+            })
+            socket.addEventListener('open', function (e) {
+                socket.send('-')
+            })
+        }
+    },
+    template: document.querySelector('#app-login').innerHTML
 })
 
 const appMain = Vue.component('app-main', {
@@ -153,9 +223,6 @@ const appMain = Vue.component('app-main', {
             this.initWebSocket()
         })
     },
-    /*watch: {
-        '$route': 'initWebSocket'
-    },*/
     methods: {
         initWebSocket: function () {
             socket = new WebSocket('ws://' + this.host + '/string?token=' + this.token)
@@ -186,7 +253,7 @@ const appMain = Vue.component('app-main', {
                         } else {
                             buffer.appendBuffer(e.data)
                         }
-                        if (audio.buffered.length != 0) {
+                        if (audio.buffered.length !== 0) {
                             if ((audio.buffered.end(0) - audio.currentTime) > 0.4) {
                                 audio.currentTime = audio.buffered.end(0)
                             }
@@ -194,6 +261,9 @@ const appMain = Vue.component('app-main', {
                     }
                 })
             })
+        },
+        home: function () {
+            this.$router.push('/')
         }
     },
     template: document.querySelector('#app-main').innerHTML
@@ -201,13 +271,18 @@ const appMain = Vue.component('app-main', {
 
 document.querySelector('#templates').innerHTML = ''
 const router = new VueRouter({
-    routes: [{
+    routes: [
+        {
             path: '/main',
-            component: appMain,
+            component: appMain
+        },
+        {
+            path: '/login',
+            component: appLogin
         },
         {
             path: '/',
-            component: appServerList,
+            component: appServerList
         }
     ]
 })
