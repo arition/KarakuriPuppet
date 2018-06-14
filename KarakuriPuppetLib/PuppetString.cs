@@ -3,11 +3,9 @@ using CSCore.SoundIn;
 using KarakuriPuppetModel;
 using Newtonsoft.Json;
 using System;
-using System.Threading;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 using WindowsInput;
-using ErrorEventArgs = WebSocketSharp.ErrorEventArgs;
 
 namespace KarakuriPuppetLib
 {
@@ -20,6 +18,7 @@ namespace KarakuriPuppetLib
         public PuppetString(string token)
         {
             _token = token;
+            _inputSimulator.Mouse.MouseWheelClickSize = 20;
         }
 
         protected override void OnOpen()
@@ -45,13 +44,10 @@ namespace KarakuriPuppetLib
                     case '0':
                         var keyboardData = JsonConvert.DeserializeObject<Keyboard>(jsonData);
                         _inputSimulator.Keyboard.TextEntry(keyboardData.Content);
-                        Console.WriteLine($"I Receive: {keyboardData.Content}");
                         break;
                     case '1':
                         var mouseMovedata = JsonConvert.DeserializeObject<MouseMove>(jsonData);
                         _inputSimulator.Mouse.MoveMouseBy(mouseMovedata.DeltaX, mouseMovedata.DeltaY);
-                        Console.WriteLine(
-                            $"I Receive: MouseX: {mouseMovedata.DeltaX}, MouseY: {mouseMovedata.DeltaY}");
                         break;
                     case '2':
                         _inputSimulator.Mouse.LeftButtonClick();
