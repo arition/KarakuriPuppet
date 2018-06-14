@@ -64,8 +64,8 @@ namespace KarakuriPuppetLib
                 };
 #pragma warning disable 618
                 webSocketServer.AddWebSocketService("/string", () => new PuppetString(puppet._token));
+                webSocketServer.AddWebSocketService("/echo", () => new Echo(puppet._token));
 #pragma warning restore 618
-                //webSocketServer.AddWebSocketService<PuppetString>("/string");
                 webSocketServer.Start();
                 puppet._webSocketServer = webSocketServer;
                 return PuppetStateStarted.GetInstance();

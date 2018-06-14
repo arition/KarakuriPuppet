@@ -25,6 +25,7 @@ namespace KarakuriPuppetLib
         protected override void OnOpen()
         {
             _validated = Context.QueryString["token"] == _token;
+            if (!_validated) Context.WebSocket.Close(4000);
             var capture = new WasapiLoopbackCapture();
             capture.Initialize();
             capture.Start();

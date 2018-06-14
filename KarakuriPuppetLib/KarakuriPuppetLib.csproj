@@ -60,7 +60,7 @@
     <Compile Include="PuppetState.cs" />
     <Compile Include="PuppetString.cs" />
     <Compile Include="WebSocketStream.cs" />
-    <Compile Include="Ywwuyi.cs" />
+    <Compile Include="Echo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
