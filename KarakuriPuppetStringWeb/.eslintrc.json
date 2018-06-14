@@ -1,0 +1,16 @@
+{
+    "extends": "standard",
+    "env": {
+        "browser": true
+    },
+    "globals": {
+        "Vue": false,
+        "VueRouter": false
+    },
+    "rules": {
+        "indent": ["error", 4, {
+            "SwitchCase": 1
+        }],
+        "eol-last": "off"
+    }
+}
