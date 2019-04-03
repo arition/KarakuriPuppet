@@ -24,7 +24,7 @@ KarakuriPuppet.exe --port 8888 --token <Your token>
 
 ### Client
 
-Visit [http://kp.lolipush.tk](http://kp.lolipush.tk) to use the client.
+Visit [http://kp.koromo.moe](http://kp.koromo.moe) to use the client.
 
 Note: You must visit the link in HTTP, not in HTTPS. If you use HTTPS, the browser will force to use encrypted websocket, which cannot be done for this project (You cannot apply a cert for a local service).
 
