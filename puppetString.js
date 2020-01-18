@@ -235,7 +235,7 @@ const appMain = Vue.component('app-main', {
 
             mediaSource.addEventListener('sourceopen', function () {
                 const queue = []
-                const buffer = mediaSource.addSourceBuffer('audio/mpeg')
+                const buffer = mediaSource.addSourceBuffer('audio/aac')
 
                 buffer.addEventListener('update', function () { // Note: Have tried 'updateend'
                     if (queue.length > 0 && !buffer.updating) {
