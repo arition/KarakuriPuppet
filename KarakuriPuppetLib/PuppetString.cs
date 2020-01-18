@@ -31,7 +31,6 @@ namespace KarakuriPuppetLib
             capture.Initialize();
             capture.Start();
             var wsStream = new WebSocketStream(this);
-            //File.OpenRead("1.mp4").CopyTo(wsStream);
             var encoder = new AacEncoder(capture.WaveFormat, wsStream, 192000,
                 TranscodeContainerTypes.MFTranscodeContainerType_ADTS);
             capture.DataAvailable += (sender, e) => encoder.Write(e.Data, e.Offset, e.ByteCount);
