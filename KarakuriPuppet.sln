@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KarakuriPuppet", "KarakuriPuppet\KarakuriPuppet.csproj", "{4EEC8499-1D4D-4261-8EF3-804B33DAC980}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KarakuriPuppetLib", "KarakuriPuppetLib\KarakuriPuppetLib.csproj", "{52304E88-E449-4F9A-A04E-D2E461569EC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KarakuriPuppetModel", "KarakuriPuppetModel\KarakuriPuppetModel.csproj", "{5EF8D910-2AE2-4E6A-B0D3-EEBDDF086661}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KarakuriPuppetModel", "KarakuriPuppetModel\KarakuriPuppetModel.csproj", "{F8D4B296-4206-4E88-AF19-75574F793C0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{52304E88-E449-4F9A-A04E-D2E461569EC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52304E88-E449-4F9A-A04E-D2E461569EC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52304E88-E449-4F9A-A04E-D2E461569EC5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5EF8D910-2AE2-4E6A-B0D3-EEBDDF086661}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5EF8D910-2AE2-4E6A-B0D3-EEBDDF086661}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5EF8D910-2AE2-4E6A-B0D3-EEBDDF086661}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5EF8D910-2AE2-4E6A-B0D3-EEBDDF086661}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8D4B296-4206-4E88-AF19-75574F793C0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8D4B296-4206-4E88-AF19-75574F793C0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8D4B296-4206-4E88-AF19-75574F793C0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8D4B296-4206-4E88-AF19-75574F793C0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
