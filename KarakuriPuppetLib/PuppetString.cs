@@ -3,9 +3,11 @@ using CSCore.SoundIn;
 using KarakuriPuppetModel;
 using Newtonsoft.Json;
 using System;
+using System.IO;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 using WindowsInput;
+using CSCore.Codecs.AAC;
 
 namespace KarakuriPuppetLib
 {
@@ -29,7 +31,9 @@ namespace KarakuriPuppetLib
             capture.Initialize();
             capture.Start();
             var wsStream = new WebSocketStream(this);
-            var encoder = MediaFoundationEncoder.CreateMP3Encoder(capture.WaveFormat, wsStream);
+            //File.OpenRead("1.mp4").CopyTo(wsStream);
+            var encoder = new AacEncoder(capture.WaveFormat, wsStream, 192000,
+                TranscodeContainerTypes.MFTranscodeContainerType_ADTS);
             capture.DataAvailable += (sender, e) => encoder.Write(e.Data, e.Offset, e.ByteCount);
         }
 
