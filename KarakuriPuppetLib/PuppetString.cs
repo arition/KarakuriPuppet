@@ -1,13 +1,13 @@
-﻿using CSCore.MediaFoundation;
+﻿using System;
+using WindowsInput;
+using CSCore;
+using CSCore.Codecs.AAC;
+using CSCore.MediaFoundation;
 using CSCore.SoundIn;
 using KarakuriPuppetModel;
 using Newtonsoft.Json;
-using System;
-using System.IO;
 using WebSocketSharp;
 using WebSocketSharp.Server;
-using WindowsInput;
-using CSCore.Codecs.AAC;
 
 namespace KarakuriPuppetLib
 {
@@ -27,10 +27,11 @@ namespace KarakuriPuppetLib
         {
             _validated = Context.QueryString["token"] == _token;
             if (!_validated) Context.WebSocket.Close(4000);
-            var capture = new WasapiLoopbackCapture();
+            var capture = new WasapiLoopbackCapture(0, new WaveFormat());
             capture.Initialize();
             capture.Start();
             var wsStream = new WebSocketStream(this);
+            Console.WriteLine($"Captured audio format: {capture.WaveFormat}");
             var encoder = new AacEncoder(capture.WaveFormat, wsStream, 192000,
                 TranscodeContainerTypes.MFTranscodeContainerType_ADTS);
             capture.DataAvailable += (sender, e) => encoder.Write(e.Data, e.Offset, e.ByteCount);
@@ -87,7 +88,7 @@ namespace KarakuriPuppetLib
                 Console.Error.WriteLine(ex.Message);
             }
         }
-        
+
         public new void Send(byte[] data)
         {
             base.Send(data);
