@@ -230,6 +230,12 @@ const appMain = Vue.component('app-main', {
             const audio = document.querySelector('#app #audioSource')
             const mediaSource = new MediaSource()
 
+            // reset src to avoid chrome stop playing 
+            audio.addEventListener('error', () => {
+                audio.src = URL.createObjectURL(mediaSource)
+                audio.play()
+            })
+
             audio.src = URL.createObjectURL(mediaSource)
             audio.pause()
 
