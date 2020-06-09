@@ -63,7 +63,9 @@ namespace KarakuriPuppetLib
                     Realm = "KarakuriPuppet"
                 };
 #pragma warning disable 618
-                webSocketServer.AddWebSocketService("/string", () => new PuppetString(puppet._token));
+                webSocketServer.AddWebSocketService("/string", () => new PuppetString(puppet._token, puppet._format));
+                webSocketServer.AddWebSocketService("/audio", () => new PuppetAudio(puppet._token, puppet._format));
+                webSocketServer.AddWebSocketService("/audio/stream", () => new PuppetAudioStream(puppet._token, puppet._format));
                 webSocketServer.AddWebSocketService("/echo", () => new Echo(puppet._token));
 #pragma warning restore 618
                 webSocketServer.Start();

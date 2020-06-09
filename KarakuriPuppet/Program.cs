@@ -16,7 +16,7 @@ namespace KarakuriPuppet
             Parser.Default.ParseArguments<Option>(args).WithParsed(opt =>
             {
                 var puppet = new Puppet();
-                puppet.Start("0.0.0.0", opt.Port, opt.Token);
+                puppet.Start("0.0.0.0", opt.Port, opt.Token, opt.Format);
                 Console.WriteLine($"Server runs on: 0.0.0.0:{opt.Port}. Press Ctrl+C to stop.");
                 while (true)
                 {

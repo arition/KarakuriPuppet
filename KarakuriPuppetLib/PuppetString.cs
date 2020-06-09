@@ -11,14 +11,16 @@ using WebSocketSharp.Server;
 
 namespace KarakuriPuppetLib
 {
-    public class PuppetString : WebSocketBehavior
+    public class PuppetString : WebSocketBehavior, IPuppetWebSocketStream
     {
         private readonly InputSimulator _inputSimulator = new InputSimulator();
         private readonly string _token;
+        private readonly AudioFormat _format;
         private bool _validated;
 
-        public PuppetString(string token)
+        public PuppetString(string token, AudioFormat format)
         {
+            _format = format;
             _token = token;
             _inputSimulator.Mouse.MouseWheelClickSize = 20;
         }
@@ -27,14 +29,6 @@ namespace KarakuriPuppetLib
         {
             _validated = Context.QueryString["token"] == _token;
             if (!_validated) Context.WebSocket.Close(4000);
-            var capture = new WasapiLoopbackCapture(0, new WaveFormat());
-            capture.Initialize();
-            capture.Start();
-            var wsStream = new WebSocketStream(this);
-            Console.WriteLine($"Captured audio format: {capture.WaveFormat}");
-            var encoder = new AacEncoder(capture.WaveFormat, wsStream, 192000,
-                TranscodeContainerTypes.MFTranscodeContainerType_ADTS);
-            capture.DataAvailable += (sender, e) => encoder.Write(e.Data, e.Offset, e.ByteCount);
         }
 
         protected override void OnMessage(MessageEventArgs e)

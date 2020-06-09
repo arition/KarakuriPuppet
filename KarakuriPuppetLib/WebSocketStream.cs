@@ -10,18 +10,18 @@ namespace KarakuriPuppetLib
 {
     public class WebSocketStream : MemoryStream
     {
-        private readonly PuppetString _puppetString;
+        private readonly IPuppetWebSocketStream _puppetWebSocketStream;
 
-        public WebSocketStream(PuppetString puppetString)
+        public WebSocketStream(IPuppetWebSocketStream puppetWebSocketStream)
         {
-            _puppetString = puppetString;
+            _puppetWebSocketStream = puppetWebSocketStream;
         }
 
         public override void Write(byte[] buffer, int offset, int count)
         {
-            if (_puppetString.State == WebSocketState.Open)
+            if (_puppetWebSocketStream.State == WebSocketState.Open)
             {
-                _puppetString.Send(buffer);
+                _puppetWebSocketStream.Send(buffer);
             }
         }
     }

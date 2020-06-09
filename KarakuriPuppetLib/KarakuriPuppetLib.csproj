@@ -56,8 +56,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AudioFormat.cs" />
+    <Compile Include="IPuppetWebSocketStream.cs" />
     <Compile Include="Puppet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PuppetAudio.cs" />
     <Compile Include="PuppetState.cs" />
     <Compile Include="PuppetString.cs" />
     <Compile Include="WebSocketStream.cs" />

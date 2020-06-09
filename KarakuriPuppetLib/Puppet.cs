@@ -9,6 +9,7 @@ namespace KarakuriPuppetLib
         private int _port;
         private string _token;
         private IPuppetState _puppetState = PuppetStateStoped.GetInstance();
+        private AudioFormat _format;
 
         /// <summary>
         /// Start Websocket Server
@@ -16,8 +17,10 @@ namespace KarakuriPuppetLib
         /// <param name="ip">Listen IPAddress</param>
         /// <param name="port">Port</param>
         /// <param name="token">Password for connecting server</param>
-        public void Start(string ip, int port, string token)
+        /// <param name="format">Format of the audio stream</param>
+        public void Start(string ip, int port, string token, AudioFormat format)
         {
+            _format = format;
             _token = token;
             _port = port;
             _ip = ip;
