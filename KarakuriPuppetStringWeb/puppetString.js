@@ -21,7 +21,9 @@ Vue.component('app-keyboard', {
                 this.volumeIcon = 'volume_up'
                 audio.play()
                 setTimeout(function () {
-                    audio.currentTime = audio.buffered.end(0)
+                    try {
+                        audio.currentTime = audio.buffered.end(0)
+                    } catch { }
                 }, 100)
             } else {
                 this.volumeIcon = 'volume_off'
@@ -239,11 +241,13 @@ const appMain = Vue.component('app-main', {
             audio.src = URL.createObjectURL(mediaSource)
             audio.pause()
 
-            mediaSource.addEventListener('sourceopen', function () {
+            mediaSource.addEventListener('sourceopen', () => {
                 const queue = []
 
                 const audioSocket = new WebSocket('ws://' + this.host + '/audio?token=' + this.token)
-                audioSocket.send('0')
+                audioSocket.addEventListener('open', () => {
+                    audioSocket.send('0')
+                })
 
                 const audioStreamSocket = new WebSocket('ws://' + this.host + '/audio/stream?token=' + this.token)
                 audioStreamSocket.binaryType = 'arraybuffer'
@@ -260,24 +264,24 @@ const appMain = Vue.component('app-main', {
                         if (queue.length > 0 && !buffer.updating) {
                             buffer.appendBuffer(queue.shift())
                         }
+                    })
 
-                        audioSocket.addEventListener('message', function (e) {
-                            if (audio.paused) {
-                                buffer.abort()
-                                queue.length = 0
+                    audioStreamSocket.addEventListener('message', function (e) {
+                        if (audio.paused) {
+                            buffer.abort()
+                            queue.length = 0
+                        } else {
+                            if (buffer.updating || queue.length > 0) {
+                                queue.push(e.data)
                             } else {
-                                if (buffer.updating || queue.length > 0) {
-                                    queue.push(e.data)
-                                } else {
-                                    buffer.appendBuffer(e.data)
-                                }
-                                if (audio.buffered.length !== 0) {
-                                    if ((audio.buffered.end(0) - audio.currentTime) > 0.4) {
-                                        audio.currentTime = audio.buffered.end(0)
-                                    }
+                                buffer.appendBuffer(e.data)
+                            }
+                            if (audio.buffered.length !== 0) {
+                                if ((audio.buffered.end(0) - audio.currentTime) > 0.4) {
+                                    audio.currentTime = audio.buffered.end(0)
                                 }
                             }
-                        })
+                        }
                     })
                 })
             })
