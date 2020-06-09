@@ -241,30 +241,44 @@ const appMain = Vue.component('app-main', {
 
             mediaSource.addEventListener('sourceopen', function () {
                 const queue = []
-                const buffer = mediaSource.addSourceBuffer('audio/aac')
 
-                buffer.addEventListener('update', function () { // Note: Have tried 'updateend'
-                    if (queue.length > 0 && !buffer.updating) {
-                        buffer.appendBuffer(queue.shift())
+                const audioSocket = new WebSocket('ws://' + this.host + '/audio?token=' + this.token)
+                audioSocket.send('0')
+
+                const audioStreamSocket = new WebSocket('ws://' + this.host + '/audio/stream?token=' + this.token)
+                audioStreamSocket.binaryType = 'arraybuffer'
+
+                audioSocket.addEventListener('message', function (e) {
+                    let buffer = null
+                    if (e.data === 'MP3') {
+                        buffer = mediaSource.addSourceBuffer('audio/mpeg')
+                    } else if (e.data === 'AAC') {
+                        buffer = mediaSource.addSourceBuffer('audio/aac')
                     }
-                })
 
-                socket.addEventListener('message', function (e) {
-                    if (audio.paused) {
-                        buffer.abort()
-                        queue.length = 0
-                    } else {
-                        if (buffer.updating || queue.length > 0) {
-                            queue.push(e.data)
-                        } else {
-                            buffer.appendBuffer(e.data)
+                    buffer.addEventListener('update', function () { // Note: Have tried 'updateend'
+                        if (queue.length > 0 && !buffer.updating) {
+                            buffer.appendBuffer(queue.shift())
                         }
-                        if (audio.buffered.length !== 0) {
-                            if ((audio.buffered.end(0) - audio.currentTime) > 0.4) {
-                                audio.currentTime = audio.buffered.end(0)
+
+                        audioSocket.addEventListener('message', function (e) {
+                            if (audio.paused) {
+                                buffer.abort()
+                                queue.length = 0
+                            } else {
+                                if (buffer.updating || queue.length > 0) {
+                                    queue.push(e.data)
+                                } else {
+                                    buffer.appendBuffer(e.data)
+                                }
+                                if (audio.buffered.length !== 0) {
+                                    if ((audio.buffered.end(0) - audio.currentTime) > 0.4) {
+                                        audio.currentTime = audio.buffered.end(0)
+                                    }
+                                }
                             }
-                        }
-                    }
+                        })
+                    })
                 })
             })
         },
