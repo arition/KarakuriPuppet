@@ -50,6 +50,7 @@ namespace KarakuriPuppetLib
         private readonly AudioFormat _format;
         private readonly string _token;
         private bool _validated;
+        private WasapiLoopbackCapture _capture;
 
         public PuppetAudioStream(string token, AudioFormat format)
         {
@@ -66,24 +67,38 @@ namespace KarakuriPuppetLib
         {
             _validated = Context.QueryString["token"] == _token;
             if (!_validated) Context.WebSocket.Close(4000);
-            var capture = new WasapiLoopbackCapture(0, new WaveFormat());
-            capture.Initialize();
-            capture.Start();
+            _capture = new WasapiLoopbackCapture(0, new WaveFormat());
+            _capture.Initialize();
+            _capture.Start();
             var wsStream = new WebSocketStream(this);
-            Console.WriteLine($"Captured audio format: {capture.WaveFormat}");
+            Console.WriteLine($"Captured audio format: {_capture.WaveFormat}");
             IWriteable encoder = null;
             switch (_format)
             {
                 case AudioFormat.AAC:
-                    encoder = new AacEncoder(capture.WaveFormat, wsStream, 192000,
+                    encoder = new AacEncoder(_capture.WaveFormat, wsStream, 128000,
                         TranscodeContainerTypes.MFTranscodeContainerType_ADTS);
                     break;
                 case AudioFormat.MP3:
-                    encoder = MediaFoundationEncoder.CreateMP3Encoder(capture.WaveFormat, wsStream);
+                    encoder = MediaFoundationEncoder.CreateMP3Encoder(_capture.WaveFormat, wsStream, 320000);
                     break;
             }
 
-            capture.DataAvailable += (sender, e) => { encoder?.Write(e.Data, e.Offset, e.ByteCount); };
+            _capture.DataAvailable += (sender, e) => { encoder?.Write(e.Data, e.Offset, e.ByteCount); };
+        }
+
+        protected override void OnClose(CloseEventArgs e)
+        {
+            _capture.Stop();
+            _capture.Dispose();
+            base.OnClose(e);
+        }
+
+        protected override void OnError(ErrorEventArgs e)
+        {
+            _capture.Stop();
+            _capture.Dispose();
+            base.OnError(e);
         }
     }
 }
